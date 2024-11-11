@@ -4,41 +4,61 @@ Platform: GeeksForGeeks
 Difficulty: Medium
 Link: https://practice.geeksforgeeks.org/problems/array-manipulation
 '''
-```python
-def arrayManipulation(n: int, queries: list[list]) -> int:
-    """
-    Given an array of integers, perform the following operations:
+```java
+import java.io.*;
+import java.math.BigInteger;
+import java.util.*;
 
-    For each (a, b, k) tuple in queries, add the value k to all elements from index a to b (both inclusive).
+public class Solution {
 
-    Return the maximum value in the array after performing all operations.
+    // Complete the arrayManipulation function below.
+    static long arrayManipulation(int n, int[][] queries) {
+        long[] arr = new long[n + 2];
 
-    Args:
-        n (int): Length of the array
-        queries (list[list]): List of tuples (a, b, k)
+        for (int[] query : queries) {
+            arr[query[0]] += query[2];
+            arr[query[1] + 1] -= query[2];
+        }
 
-    Returns:
-        int: Maximum value in the array after performing all operations
-    """
+        long max = 0;
+        long sum = 0;
+        for (long num : arr) {
+            sum += num;
+            max = Math.max(max, sum);
+        }
 
-    # Create a frequency array
-    freq = [0] * (n + 2)
+        return max;
+    }
 
-    # Iterate over the queries
-    for a, b, k in queries:
-        freq[a] += k
-        freq[b + 1] -= k
+    private static final Scanner scanner = new Scanner(System.in);
 
-    # Calculate the prefix sum of the frequency array
-    prefix = [0] * (n + 2)
-    for i in range(1, n + 2):
-        prefix[i] = prefix[i - 1] + freq[i]
+    public static void main(String[] args) throws IOException {
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
 
-    # Iterate over the prefix sum array and find the maximum value
-    max_value = 0
-    for i in range(1, n + 2):
-        max_value = max(max_value, prefix[i])
+        String[] nm = scanner.nextLine().split(" ");
 
-    # Return the maximum value
-    return max_value
+        int n = Integer.parseInt(nm[0]);
+
+        int m = Integer.parseInt(nm[1]);
+
+        int[][] queries = new int[m][3];
+
+        for (int i = 0; i < m; i++) {
+            String[] queriesRowItems = scanner.nextLine().split(" ");
+            for (int j = 0; j < 3; j++) {
+                int queriesItem = Integer.parseInt(queriesRowItems[j]);
+                queries[i][j] = queriesItem;
+            }
+        }
+
+        long result = arrayManipulation(n, queries);
+
+        bufferedWriter.write(String.valueOf(result));
+        bufferedWriter.newLine();
+
+        bufferedWriter.close();
+
+        scanner.close();
+    }
+}
 ```
